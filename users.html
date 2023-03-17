@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/materialize/css/materialize.min.css">
+    <link rel="stylesheet" href="/assets/css/util.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="manifest" href="/manifest.json">
+    <title>Document</title>
+</head>
+<body x-data="usersData">
+
+  <!-- navbar section ---------start-------------------- -->
+    <nav class="white z-depth-0 top_navbar">
+        <div class="nav-wrapper">
+          <a href="#!" class="blue-text hide-on-med-and-up">Users management</a>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger blue-text"><i class="material-icons">menu</i></a>
+          <ul class="hide-on-med-and-down container">
+            <li><a href="/" class="blue-text">Home</a></li>
+            <li><a href="/users.html" class="blue-text">User Management</a></li>
+            <li><a href="https://codeyad.com" class="blue-text">Codeyad</a></li>
+            <li><a href="https://www.youtube.com/channel/UC7_WFOLcQ4x9HCat_pE3hcA" class="blue-text">AQ fast learn</a></li>
+          </ul>
+        </div>
+    </nav>
+    
+    <ul class="sidenav" id="mobile-demo">
+      <li>
+        <div class="user-view">
+          <div class="background">
+            <img src="/assets/images/office-2.webp" class="w-full">
+          </div>
+          <a><img class="circle" src="/assets/images/avatar.png"></a>
+          <a><span class="white-text name">Qasem Bassaki</span></a>
+          <a><span class="white-text email">qasem@gmail.com</span></a>
+        </div>
+      </li>
+      <li>
+        <a href="https://www.youtube.com/channel/UC7_WFOLcQ4x9HCat_pE3hcA">
+          <i class="material-icons">insert_link</i>
+          AQ Fast Learn
+        </a>
+      </li>
+      <li>
+        <a href="https://codeyad.com">
+          <i class="material-icons">insert_link</i>
+          Codeyad
+        </a>
+      </li>
+      <li><div class="divider"></div></li>
+      <li><a class="subheader">Pages:</a></li>
+      <li><a class="waves-effect" href="/">Home</a></li>
+      <li><a class="waves-effect" href="/users.html">Users</a></li>
+    </ul>
+  <!-- navbar section ---------end------- -->
+
+
+  <!-- content section ---------start-------------------- -->
+    
+  <section id="top_actions_section" class="row m-b-0 container">
+      <!-- add button--------- -->
+      <div class="p-l-10 p-r-10 p-t-10 col s12 m3 l2">
+        <button id="add_user_button" class="waves-effect waves-light btn blue darken-2 p-l-30 p-r-30 w-full rounded_pill flex-c" x-on:click="showAddModal = true; userIdToEdit = null; handleResetForm()" >
+            <i class="material-icons m-r-5">add</i>
+            Add User
+        </button>
+      </div>
+      <!-- search section--------- -->
+      <div class="row col s12 m9 l8 m-b-5">
+        <div class="input-field col s12" 
+        x-init="$watch('searchChar', (value)=>handleSearch(value))">
+          <input id="search" type="text" class="validate" x-model="searchChar">
+          <label for="search">
+            <i class="material-icons pos-relative top-7">search</i>
+            Search
+          </label>
+        </div>
+      </div>
+
+      <div class="col l2 hide-on-med-and-down"></div>
+
+  </section>
+
+  <template x-if="isLoading">
+    <div class="center-align">
+      <div class="preloader-wrapper small active">
+        <div class="spinner-layer spinner-green-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div><div class="gap-patch">
+            <div class="circle"></div>
+          </div><div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <section class="user_list_section" x-init="getUsers()">
+    <ul class="collapsible hide-on-med-and-up">
+      <template x-for="user in pageUsers">
+        <li class="users_list_item">
+          <div class="collapsible-header">
+            <i class="material-icons blue-text darken-2 users_list_arrow_icon trans-0-2">arrow_drop_down_circle</i>
+            <span x-text="user.name"></span>
+          </div>
+          <div class="collapsible-body">
+            <div class="p-all-5">
+              <span class="f-bold">Username : </span>
+              <span x-text="user.username"></span>
+            </div>
+            <div class="p-all-5">
+              <span class="f-bold">Email : </span>
+              <span x-text="user.email"></span>
+            </div>
+            <div class="p-all-5">
+              <span class="f-bold">Address : </span>
+              <span x-text="(user.address?.city || '') + '-' + (user.address?.street || '')"></span>
+            </div>
+            <div class="p-all-5 flex-l-m">
+              <span class="f-bold">Action : </span>
+              <i class="material-icons red-text m-l-5 m-r-5" x-on:click="handleDeleteUser(user.id)">delete_forever</i>
+              <i class="material-icons orange-text darken-3 m-l-5 m-r-5" x-on:click="handleUpdateUser(user)">edit</i>
+            </div>
+          </div>
+        </li>
+      </template>
+    </ul>
+
+    <div class="hide-on-med-and-down show-on-medium-and-up container">
+      <table class="striped centered highlight">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody class="desktop_table_body">
+          <template x-for="user in pageUsers">
+            <tr>
+              <td x-text="user.id"></td>
+              <td x-text="user.name"></td>
+              <td x-text="user.username"></td>
+              <td x-text="user.email"></td>
+              <td x-text="(user.address?.city || '') + '-' + (user.address?.street || '')"></td>
+              <td>
+                <i class="material-icons orange-text darken-3 m-l-5 m-r-5 hov-pointer" x-on:click="handleUpdateUser(user)">edit</i>
+                <i class="material-icons red-text m-l-5 m-r-5 hov-pointer" x-on:click="handleDeleteUser(user.id)">
+                  delete_forever
+                </i>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination_container container p-l-9 p-r-9 p-t-15 p-b-10 flex-sb-m pos-fixed left-0 right-0 bottom-0 z-depth-4 rounded_top_30">
+
+      <div class="pagination_item_counts flex-l p-l-10 flex-l-m ">
+        showing
+        <span class="m-l-5 m-r-5 max-w-50 pos-relative top-4" 
+        x-init="$watch('itemsCount', (value)=>handleChangeItemsCount(value))">
+          <input type="number" class="blue-text darken-2 no-border center-align m-b-0" x-model="itemsCount" x-on:change="pagination()">
+        </span>
+        of 
+        <span class="blue-text darken-2 m-l-5 m-r-5" x-text="users.length">100</span>
+      </div>
+
+      <strong x-text="currentPage" class="blue-text page_number"></strong>
+
+      <div class="pgination_buttons">
+        <i class="material-icons blue darken-2 m-l-5 m-r-5 p-l-5 p-r-5 p-t-1 p-b-3 waves-effect waves-light white-text rounded_pill" x-on:click="prevPage()">keyboard_arrow_left</i>
+        <i class="material-icons blue darken-2 m-l-5 m-r-5 p-l-5 p-r-5 p-t-1 p-b-3 waves-effect waves-light white-text rounded_pill" x-on:click="nextPage()">keyboard_arrow_right</i>
+      </div>
+
+    </div>
+  </section>
+  
+
+  <div class="add_user_modal_back" x-show="showAddModal" x-transition.duration.300ms  x-on:click="showAddModal = false"></div>
+  <div class="add_user_modal container rounded_top_30 trans-0-3" x-bind:class="{'show' : showAddModal}">
+    <div class="row p-t-10 p-b-10 p-r-40 p-l-40 center-on-small-only">
+      <h5>
+        <i class="material-icons m-r-10 m-l-10 pos-relative top-4">person_add</i>
+        <span x-text="userIdToEdit ? 'Edit User' : 'Add User'"></span>
+      </h5>
+
+      <form>
+
+        <div class="input-field col s12">
+          <input id="name" type="text" class="validate" x-model="newUserInfo.name"/>
+          <label for="name">name:</label>
+        </div>
+
+        <div class="input-field col s12">
+          <input id="username" type="text" class="validate" x-model="newUserInfo.username"/>
+          <label for="username">username: </label>
+        </div>
+        
+        <div class="input-field col s12">
+          <input id="email" type="email" class="validate" x-model="newUserInfo.email"/>
+          <label for="email">Email</label>
+        </div>
+
+
+        <button
+          type="button"
+          class="waves-effect waves-light btn blue darken-1 m-t-20 m-b-10 w-full max-w-250 rounded_pill"
+          x-on:click="userIdToEdit ? handleConfirmEditUser() :handleSubmitAddUserForm()"
+          x-bind:class="{'pulse' : isLoading, 'orange': userIdToEdit}"
+          x-bind:disabled="isLoading"
+        >
+          submit
+        </button>
+
+
+
+      </form>
+
+
+    </div>
+  </div>
+  
+  <!-- content section ---------end------- -->
+
+
+
+  <script defer src="/assets/js/alpine.js"></script>
+  <script src="/assets/js/alpineJsContollers/usersController.js"></script>
+  <script src="/assets/js/axios.js"></script>
+  <script src="/assets/materialize/js/materialize.min.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/users.js"></script>
+</body>
+</html>

@@ -65,3 +65,19 @@ table.highlight > tbody > tr:hover {
     height: 30px;
 }
 
+#install-prompt{
+    position: fixed;
+    bottom: -55px;
+    width: 100%;
+    text-align: center;
+    background: #286bb8;
+    padding: 15px;
+    color: white;
+    font-size: 1.2rem;
+    transition: all 200ms ease;
+}
+
+#install-prompt.show{
+    bottom: 0;
+}
+

@@ -10,10 +10,8 @@ if ("serviceWorker" in navigator) {
 
 var deferredPrompt;
 window.addEventListener("beforeinstallprompt", (e) => {
-  console.log("beforeinstallprompt...");
   e.preventDefault();
   deferredPrompt = e;
-  console.log(e);
   return false;
 });
 

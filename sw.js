@@ -25,12 +25,12 @@ self.addEventListener("activate", function(e){
 self.addEventListener("fetch", function(e){
     e.respondWith(
         caches.match(e.request).then(res=>{
-            // if (res) {
-            //     return res
-            // }else{
-            //     return fetch(e.request)
-            // }
-            return res || fetch(e.request)
+            return res || fetch(e.request).then(fetchRes=>{
+                return caches.open("dynamic").then(cache=>{
+                    cache.put(e.request, fetchRes.clone())
+                    return fetchRes
+                })
+            }).catch(err=>{})
         })
     )
 })

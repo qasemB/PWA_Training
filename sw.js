@@ -1,6 +1,7 @@
 let staticItems = [
     "/",
     "/index.html",
+    "/offline.html",
     "/assets/materialize/css/materialize.min.css",
     "/assets/css/util.css",
     "https://fonts.googleapis.com/icon?family=Material+Icons",
@@ -50,7 +51,13 @@ self.addEventListener("fetch", function(e){
                     cache.put(e.request, fetchRes.clone())
                     return fetchRes
                 })
-            }).catch(err=>{})
+            }).catch(err=>{
+                return caches.open(STATIC_CACHE).then(cache=>{
+                    if (e.request.headers.get("accept").includes("text/html")) {
+                        return cache.match("/offline.html")
+                    }
+                })
+            })
         })
     )
 })

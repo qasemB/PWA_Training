@@ -11,7 +11,7 @@ let staticItems = [
     "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
 ]
 
-let STATIC_CACHE = "static-v3"
+let STATIC_CACHE = "static-v2"
 let DYNAMIC_CACHE = "dynamic"
 
 // install event -------------------------------------->>
@@ -44,20 +44,33 @@ self.addEventListener("activate", function(e){
 
 // fetch event -------------------------------------->>
 self.addEventListener("fetch", function(e){
-    e.respondWith(
-        caches.match(e.request).then(res=>{
-            return res || fetch(e.request).then(fetchRes=>{
-                return caches.open(DYNAMIC_CACHE).then(cache=>{
-                    cache.put(e.request, fetchRes.clone())
-                    return fetchRes
-                })
-            }).catch(err=>{
-                return caches.open(STATIC_CACHE).then(cache=>{
-                    if (e.request.headers.get("accept").includes("text/html")) {
-                        return cache.match("/offline.html")
-                    }
+
+    if (e.request.url.indexOf("https://jsonplaceholder.typicode.com/users") > -1) {
+        e.respondWith(
+            caches.open(DYNAMIC_CACHE).then(cache=>{
+                return fetch(e.request).then(response=>{
+                    cache.put(e.request, response.clone())
+                    return response
+                });
+            })
+        )
+    }else{
+        e.respondWith(
+            caches.match(e.request).then(res=>{
+                return res || fetch(e.request).then(fetchRes=>{
+                    return caches.open(DYNAMIC_CACHE).then(cache=>{
+                        cache.put(e.request, fetchRes.clone())
+                        return fetchRes
+                    })
+                }).catch(err=>{
+                    return caches.open(STATIC_CACHE).then(cache=>{
+                        if (e.request.headers.get("accept").includes("text/html")) {
+                            return cache.match("/offline.html")
+                        }
+                    })
                 })
             })
-        })
-    )
+        )
+    }
+
 })

@@ -18,12 +18,12 @@ window.addEventListener("beforeinstallprompt", (e) => {
 window.addEventListener("DOMContentLoaded", () => {
   if (!window.matchMedia("(display-mode: standalone)").matches) {
     setTimeout(() => {
-      document.getElementById("install-prompt").classList.add("show");
+      document.getElementById("install-prompt")?.classList.add("show");
     }, 5000);
   }
 });
 
-document.getElementById("install-prompt").addEventListener("click", (e) => {
+document.getElementById("install-prompt")?.addEventListener("click", (e) => {
   if (deferredPrompt) {
     deferredPrompt.prompt();
     e.target.classList.remove("show");

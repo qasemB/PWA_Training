@@ -17,13 +17,35 @@ document.addEventListener('alpine:init', () => {
         userIdToEdit: null,
         getUsers(){
             this.isLoading = true
+            let serverDataReceived = false
             axios.get("https://jsonplaceholder.typicode.com/users").then((res)=>{
+                serverDataReceived = true
+                console.log("server data....");
+                res.data[0].name = "qasem"
                 this.mainUsers = res.data
                 this.users = res.data
                 this.pagination()
             }).finally(()=>{
                 this.isLoading = false
             })
+
+            if ("caches" in window) {
+                caches.match("https://jsonplaceholder.typicode.com/users").then(res=>{
+                    if (res) {
+                        return res.json()
+                    }
+                }).then(response=>{
+                    if (!serverDataReceived && response) {
+                        console.log("chached data....");
+                        this.mainUsers = response.data
+                        this.users = response.data
+                        this.pagination()
+                    }
+                }).finally(()=>{
+                    this.isLoading = false
+                })
+            }
+
         },
         pagination(){
             this.pageCount = Math.ceil(this.users.length / this.itemsCount) // 10 / 4 = 3

@@ -20,7 +20,6 @@ document.addEventListener('alpine:init', () => {
             let serverDataReceived = false
             axios.get("https://jsonplaceholder.typicode.com/users").then((res)=>{
                 serverDataReceived = true
-                console.log("server data....");
                 res.data[0].name = "qasem"
                 this.mainUsers = res.data
                 this.users = res.data
@@ -36,9 +35,8 @@ document.addEventListener('alpine:init', () => {
                     }
                 }).then(response=>{
                     if (!serverDataReceived && response) {
-                        console.log("chached data....");
-                        this.mainUsers = response.data
-                        this.users = response.data
+                        this.mainUsers = response
+                        this.users = response
                         this.pagination()
                     }
                 }).finally(()=>{

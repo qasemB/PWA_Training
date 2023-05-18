@@ -14,6 +14,18 @@ let staticItems = [
 let STATIC_CACHE = "static-v2"
 let DYNAMIC_CACHE = "dynamic"
 
+const trimCache = (chachName, max)=>{
+    caches.open(chachName).then(cache=>{
+        return cache.keys().then(keys=>{
+            if (keys.length > max) {
+                cache.delete(keys[0]).then(()=>{
+                    trimCache(chachName, max);
+                })
+            }
+        })
+    })
+}
+
 // install event -------------------------------------->>
 self.addEventListener("install", function(e){
     e.waitUntil(
@@ -49,6 +61,7 @@ self.addEventListener("fetch", function(e){
         e.respondWith(
             caches.open(DYNAMIC_CACHE).then(cache=>{
                 return fetch(e.request).then(response=>{
+                    trimCache(DYNAMIC_CACHE, 10)
                     cache.put(e.request, response.clone())
                     return response
                 });
@@ -59,6 +72,7 @@ self.addEventListener("fetch", function(e){
             caches.match(e.request).then(res=>{
                 return res || fetch(e.request).then(fetchRes=>{
                     return caches.open(DYNAMIC_CACHE).then(cache=>{
+                        trimCache(DYNAMIC_CACHE, 10)
                         cache.put(e.request, fetchRes.clone())
                         return fetchRes
                     })

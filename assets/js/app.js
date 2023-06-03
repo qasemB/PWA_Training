@@ -45,3 +45,19 @@ document.addEventListener("DOMContentLoaded", function () {
     edge: "right",
   });
 });
+
+// Push notification-------------------
+setTimeout(()=>{
+  document.getElementById('notification_bell_box')?.classList.remove('dis-none')
+},1000)
+
+document.getElementById('notification_bell_box').addEventListener('click', ()=>{
+  Notification.requestPermission((res)=>{
+    if (res == "granted") {
+      new Notification('از شما ممنونم...')
+    }else{
+      console.log("Blocked...!");
+    }
+  })
+})
+

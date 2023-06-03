@@ -81,3 +81,23 @@ table.highlight > tbody > tr:hover {
     bottom: 0;
 }
 
+@keyframes rotate_bell {
+    0%   {transform: rotate(20deg);}
+    50%  {transform: rotate(-20deg);}
+    100%  {transform: rotate(20deg);}
+  }
+
+#notification_bell_box{
+    position: fixed;
+    bottom: 66px;
+    right: 14px;
+}
+
+#notification_bell_box i{
+    color: #286bb8;
+    font-size: 5rem;
+    animation-name: rotate_bell;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+

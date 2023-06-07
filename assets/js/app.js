@@ -47,14 +47,20 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Push notification-------------------
-setTimeout(()=>{
-  document.getElementById('notification_bell_box')?.classList.remove('dis-none')
-},1000)
+// if (Notification.permission != "granted") {
+  setTimeout(()=>{
+    document.getElementById('notification_bell_box')?.classList.remove('dis-none')
+  },1000)
+// }
 
 document.getElementById('notification_bell_box').addEventListener('click', ()=>{
   Notification.requestPermission((res)=>{
     if (res == "granted") {
-      new Notification('از شما ممنونم...')
+      navigator.serviceWorker.ready.then(sw=>{
+        sw.showNotification('ممنون از شما...!', {
+          body: "ممنون از شما بخاطر تایید اعلانات...!"
+        })
+      })
     }else{
       console.log("Blocked...!");
     }

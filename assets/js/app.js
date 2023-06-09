@@ -70,20 +70,7 @@ const showConfirmNotify = ()=>{
       ]
     }
     navigator.serviceWorker.ready.then(sw=>{
-      sw.showNotification('ممنون از شما...!', {
-        body: "ممنون از شما بخاطر تایید اعلانات...!",
-        icon: "/assets/images/codeyadIcon.png",
-        image: "/assets/images/office.jpg",
-        dir: "rtl",
-        vibrate: [100, 50, 200],
-        badge: "/assets/images/codeyadIcon.png",
-        tag: "group1",
-        renotify: true,
-        actions: [
-          {action: "confirm", title: "تایید", icon:"/assets/images/confirm.png"},
-          {action: "cancel", title: "انصراف", icon:"/assets/images/cancel.png"}
-        ]
-      })
+      sw.showNotification('ممنون از شما...!', options)
     })
   }
 }

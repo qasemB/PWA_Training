@@ -95,8 +95,13 @@ self.addEventListener('notificationclick', (event)=>{
     if (event.action == "confirm") {
         console.log("اکشن مورد نظر تایید شد...!");
     }else if(event.action == "cancel"){
+        event.notification.close()
         console.log("اکشن مورد نظر نادیده گرفته شد...!");
     }else{
         console.log("اکشنی انتخاب نشد...!");
     }
+})
+
+self.addEventListener('notificationclose', (event)=>{
+    console.log('notification closed...!');
 })

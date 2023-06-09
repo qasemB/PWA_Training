@@ -47,20 +47,51 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Push notification-------------------
-// if (Notification.permission != "granted") {
+// if (Notification.permission == "default") {
   setTimeout(()=>{
     document.getElementById('notification_bell_box')?.classList.remove('dis-none')
   },1000)
 // }
 
+const showConfirmNotify = ()=>{
+  if ("serviceWorker" in navigator) {
+    const options = {
+      body: "ممنون از شما بخاطر تایید اعلانات...!",
+      icon: "/assets/images/codeyadIcon.png",
+      image: "/assets/images/office.jpg",
+      dir: "ltr",
+      vibrate: [100, 50, 200],
+      badge: "/assets/images/codeyadIcon.png",
+      tag: "group1",
+      renotify: true,
+      actions: [
+        {action: "confirm", title: "تایید", icon:"/assets/images/confirm.png"},
+        {action: "cancel", title: "انصراف", icon:"/assets/images/cancel.png"}
+      ]
+    }
+    navigator.serviceWorker.ready.then(sw=>{
+      sw.showNotification('ممنون از شما...!', {
+        body: "ممنون از شما بخاطر تایید اعلانات...!",
+        icon: "/assets/images/codeyadIcon.png",
+        image: "/assets/images/office.jpg",
+        dir: "rtl",
+        vibrate: [100, 50, 200],
+        badge: "/assets/images/codeyadIcon.png",
+        tag: "group1",
+        renotify: true,
+        actions: [
+          {action: "confirm", title: "تایید", icon:"/assets/images/confirm.png"},
+          {action: "cancel", title: "انصراف", icon:"/assets/images/cancel.png"}
+        ]
+      })
+    })
+  }
+}
+
 document.getElementById('notification_bell_box').addEventListener('click', ()=>{
   Notification.requestPermission((res)=>{
     if (res == "granted") {
-      navigator.serviceWorker.ready.then(sw=>{
-        sw.showNotification('ممنون از شما...!', {
-          body: "ممنون از شما بخاطر تایید اعلانات...!"
-        })
-      })
+      showConfirmNotify()
     }else{
       console.log("Blocked...!");
     }

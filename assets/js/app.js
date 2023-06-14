@@ -47,11 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Push notification-------------------
-// if (Notification.permission == "default") {
+if (Notification.permission == "default") {
   setTimeout(()=>{
     document.getElementById('notification_bell_box')?.classList.remove('dis-none')
-  },1000)
-// }
+  },10000)
+}
 
 const showConfirmNotify = ()=>{
   if ("serviceWorker" in navigator) {

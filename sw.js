@@ -92,16 +92,31 @@ self.addEventListener("fetch", function(e){
 
 // notification -------------------------------
 self.addEventListener('notificationclick', (event)=>{
+    console.log(event);
     if (event.action == "confirm") {
         console.log("اکشن مورد نظر تایید شد...!");
     }else if(event.action == "cancel"){
         event.notification.close()
         console.log("اکشن مورد نظر نادیده گرفته شد...!");
     }else{
+        event.waitUntil(
+            clients.openWindow(event.notification.data.notifUrl)
+        )
         console.log("اکشنی انتخاب نشد...!");
     }
 })
 
 self.addEventListener('notificationclose', (event)=>{
     console.log('notification closed...!');
+})
+
+self.addEventListener('push', (event)=>{
+    const notification = event.data.json()
+    console.log(notification);
+    self.registration.showNotification(notification.title, {
+        body: notification.body,
+        data: {
+            notifUrl: notification.url
+        }
+    })
 })

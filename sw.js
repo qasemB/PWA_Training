@@ -92,16 +92,12 @@ self.addEventListener("fetch", function(e){
 
 // notification -------------------------------
 self.addEventListener('notificationclick', (event)=>{
-    console.log(event);
     if (event.action == "confirm") {
         console.log("اکشن مورد نظر تایید شد...!");
     }else if(event.action == "cancel"){
         event.notification.close()
         console.log("اکشن مورد نظر نادیده گرفته شد...!");
     }else{
-        event.waitUntil(
-            clients.openWindow(event.notification.data.notifUrl)
-        )
         console.log("اکشنی انتخاب نشد...!");
     }
 })
@@ -113,10 +109,19 @@ self.addEventListener('notificationclose', (event)=>{
 self.addEventListener('push', (event)=>{
     const notification = event.data.json()
     console.log(notification);
-    self.registration.showNotification(notification.title, {
+    const options = {
         body: notification.body,
-        data: {
-            notifUrl: notification.url
-        }
-    })
+        icon: "/assets/images/codeyadIcon.png",
+        image: "/assets/images/office.jpg",
+        dir: "ltr",
+        vibrate: [100, 50, 200],
+        badge: "/assets/images/codeyadIcon.png",
+        tag: "group1",
+        renotify: true,
+        actions: [
+          {action: "confirm", title: "تایید", icon:"/assets/images/confirm.png"},
+          {action: "cancel", title: "انصراف", icon:"/assets/images/cancel.png"}
+        ]
+      }  
+    self.registration.showNotification(notification.title, options)
 })

@@ -98,6 +98,9 @@ self.addEventListener('notificationclick', (event)=>{
         event.notification.close()
         console.log("اکشن مورد نظر نادیده گرفته شد...!");
     }else{
+        event.waitUntil(
+            clients.openWindow(event.notification.data.notifUrl)
+        )
         console.log("اکشنی انتخاب نشد...!");
     }
 })
@@ -108,7 +111,6 @@ self.addEventListener('notificationclose', (event)=>{
 
 self.addEventListener('push', (event)=>{
     const notification = event.data.json()
-    console.log(notification);
     const options = {
         body: notification.body,
         icon: "/assets/images/codeyadIcon.png",
@@ -121,7 +123,10 @@ self.addEventListener('push', (event)=>{
         actions: [
           {action: "confirm", title: "تایید", icon:"/assets/images/confirm.png"},
           {action: "cancel", title: "انصراف", icon:"/assets/images/cancel.png"}
-        ]
+        ],
+        data:{
+            notifUrl: notification.url
+        }
       }  
     self.registration.showNotification(notification.title, options)
 })

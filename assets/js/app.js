@@ -55,22 +55,36 @@ if (Notification.permission == "default") {
 
 const showConfirmNotify = ()=>{
   if ("serviceWorker" in navigator) {
-    const options = {
-      body: "ممنون از شما بخاطر تایید اعلانات...!",
-      icon: "/assets/images/codeyadIcon.png",
-      image: "/assets/images/office.jpg",
-      dir: "ltr",
-      vibrate: [100, 50, 200],
-      badge: "/assets/images/codeyadIcon.png",
-      tag: "group1",
-      renotify: true,
-      actions: [
-        {action: "confirm", title: "تایید", icon:"/assets/images/confirm.png"},
-        {action: "cancel", title: "انصراف", icon:"/assets/images/cancel.png"}
-      ]
-    }
+    // const options = {
+    //   body: "ممنون از شما بخاطر تایید اعلانات...!",
+    //   icon: "/assets/images/codeyadIcon.png",
+    //   image: "/assets/images/office.jpg",
+    //   dir: "ltr",
+    //   vibrate: [100, 50, 200],
+    //   badge: "/assets/images/codeyadIcon.png",
+    //   tag: "group1",
+    //   renotify: true,
+    //   actions: [
+    //     {action: "confirm", title: "تایید", icon:"/assets/images/confirm.png"},
+    //     {action: "cancel", title: "انصراف", icon:"/assets/images/cancel.png"}
+    //   ]
+    // }
     navigator.serviceWorker.ready.then(sw=>{
-      sw.showNotification('ممنون از شما...!', options)
+      // sw.showNotification('ممنون از شما...!', options)
+      sw.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: "BNbqX8M5NJJfs_IcL_5Gfisx7FkOYHtYniD4QMJq1RB4DeQsOmGo3lO-zzurFEqTUwtrqQHKb62p_TzxPU552yI"
+      }).then(subscription=>{
+        fetch("https://pushnotif.azhadev.ir/api/push-subscribe",{
+          method: "post",
+          body: JSON.stringify(subscription),        
+        }).then(res=>{
+          return res.json()
+        }).then(response=>{
+          console.log(response);
+          alert("این کد رو ذخیره کنید : "+ response.user_code)
+        })
+      })
     })
   }
 }

@@ -81,20 +81,20 @@
 
 
   <!-- home section ---------start-------------------- -->
-    <section class="flex-c-m flex-col sizefull p-r-20 p-l-20 p-t-100">
-      <img src="/assets/images/codeyad.png" class="w-full max-w-200 filter_shadow">
-      <a href="https://www.youtube.com/channel/UC7_WFOLcQ4x9HCat_pE3hcA" class="waves-effect waves-light btn blue darken-3 w-full max-w-250 m-t-10 mb-10 rounded_pill">Programming Tutorial</a>
-      <a href="/users.html" class="waves-effect waves-light btn blue darken-3 w-full max-w-250 m-t-10 mb-10 rounded_pill">Users Manager</a>
+    <section class="flex-c-m flex-col sizefull p-r-20 p-l-20">
+      <video id="media_player" autoplay></video>
+      <canvas id="media_canvas" width="320px" height="240px"></canvas>
+      <button id="media_capture_btn" class="waves-effect waves-light btn darken-3 w-full max-w-250 m-t-10 mb-10 rounded_pill">Capture</button>
+      <div id="media_image_box" class="m-t-20">
+        <h6>Pic and Image instead</h6>
+        <input type="text" accept="image/*" id="media_select_image">
+      </div>
     </section>
   <!-- home section ---------end------- -->
 
   <div id="install-prompt" class="hide-on-med-and-up">
     Install UMPWA on home screen
   </div>
-
-  <span id="notification_bell_box" class="dis-none">
-    <i class="material-icons">notifications_active</i>
-  </span>
 
 
   <script src="/assets/materialize/js/materialize.min.js"></script>

@@ -89,7 +89,7 @@ const showConfirmNotify = ()=>{
   }
 }
 
-document.getElementById('notification_bell_box').addEventListener('click', ()=>{
+document.getElementById('notification_bell_box')?.addEventListener('click', ()=>{
   Notification.requestPermission((res)=>{
     if (res == "granted") {
       showConfirmNotify()

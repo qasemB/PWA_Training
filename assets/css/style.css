@@ -101,3 +101,7 @@ table.highlight > tbody > tr:hover {
     animation-iteration-count: infinite;
 }
 
+#media_player{
+    max-width: 500px !important;
+}
+

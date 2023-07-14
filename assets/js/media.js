@@ -21,6 +21,15 @@ captureBtn.addEventListener('click', (e)=>{
     e.target.classList.add('dis-none')
     context.drawImage(videoElement, 0 , 0, canvasElement.clientWidth, videoElement.videoHeight/(videoElement.videoWidth/canvasElement.width))
     localStream.getVideoTracks()[0].stop();
+    // console.log(canvasElement.toDataURL());
+    // document.getElementById("img_elem").setAttribute("src", canvasElement.toDataURL())
+    const imgFile = dataURItoBlob(canvasElement.toDataURL())
+    const formData = new FormData
+    formData.append("image", imgFile);
+    // fetch("url...",{
+    //     method: "POST",
+    //     body: formData
+    // })
 })
 
 refreshBtn.addEventListener('click', ()=>{
@@ -42,4 +51,16 @@ refreshBtn.addEventListener('click', ()=>{
 //     })
 //     axios.post("url...", formData, {/*config*/})
 // })
+
+const dataURItoBlob = (dataURI)=>{
+    const byteString = atob(dataURI.split(',')[1])
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab)
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i)
+    }
+    const blob = new Blob([ab], {type: mimeString})
+    return blob
+}
 

@@ -10,18 +10,16 @@ if ("serviceWorker" in navigator) {
 
 var deferredPrompt;
 window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  return false;
-});
-
-window.addEventListener("DOMContentLoaded", () => {
   if (!window.matchMedia("(display-mode: standalone)").matches) {
     setTimeout(() => {
       document.getElementById("install-prompt")?.classList.add("show");
     }, 5000);
   }
+  e.preventDefault();
+  deferredPrompt = e;
+  return false;
 });
+
 
 document.getElementById("install-prompt")?.addEventListener("click", (e) => {
   if (deferredPrompt) {

@@ -5,10 +5,27 @@ const refreshBtn = document.getElementById('media_refresh');
 const fileInput = document.getElementById('media_select_image');
 
 const startVideo = ()=>{
-    navigator.mediaDevices.getUserMedia({video: true}).then(stream=>{
-        window.localStream = stream
-        videoElement.srcObject = stream
-    })
+
+    // if (!("mediaDevices" in navigator))  navigator.mediaDevices = {}
+    // if (!("getUserMedia" in navigator.mediaDevices)) {
+    //     console.log("not supported");
+    //     navigator.mediaDevices.getUserMedia = (constraints)=>{
+    //         const getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia
+
+    //         if (!getUserMedia) return Promise.reject(new Error('getUserMedia is not supported...'))
+
+    //         return new Promise((resolve, reject)=>{
+    //             getUserMedia.call(navigator, constraints, resolve, reject)
+    //         })
+    //     }
+    // }
+
+    if ("mediaDevices" in navigator && "getUserMedia" in navigator.mediaDevices) {
+        navigator.mediaDevices.getUserMedia({video: true}).then(stream=>{
+            window.localStream = stream
+            videoElement.srcObject = stream
+        })
+    }
 }
 
 startVideo()

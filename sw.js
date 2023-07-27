@@ -1,3 +1,6 @@
+importScripts("/assets/js/idb.js")
+importScripts("/assets/js/idbUtils.js")
+
 let staticItems = [
     "/",
     "/index.html",
@@ -6,6 +9,9 @@ let staticItems = [
     "/assets/css/util.css",
     "https://fonts.googleapis.com/icon?family=Material+Icons",
     "/assets/css/style.css",
+    "/assets/js/idb.js",
+    "/assets/js/idbUtils.js", 
+    "/assets/js/alpineJsContollers/usersController.js",
     "/assets/materialize/js/materialize.min.js",
     "/assets/js/app.js",
     "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
@@ -129,4 +135,28 @@ self.addEventListener('push', (event)=>{
         }
       }  
     self.registration.showNotification(notification.title, options)
+})
+
+// background sync -------------------
+const thisSw = self;
+self.addEventListener('sync', (event)=>{
+    console.log('Background sync event started...', event);
+    if (event.tag == 'syncPostData') {
+        console.log('Sync post data started...');
+        readAllData("postDataStore").then(data=>{
+            for (const d of data) {
+                fetch("https://jsonplaceholder.typicode.com/users", {
+                  method: "POST",
+                  body: JSON.stringify(d),
+                })
+                  .then((res) => res.json())
+                  .then(() => {
+                    deleteOneData("postDataStore", d.id).then(()=>{
+                        console.log(d.id, "deleted...");
+                        thisSw.registration.showNotification("ارسال اطلاعات انجام شد")
+                    });
+                  });
+            }
+        })
+    }
 })

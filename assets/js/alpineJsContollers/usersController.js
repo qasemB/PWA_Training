@@ -72,18 +72,31 @@ document.addEventListener('alpine:init', () => {
             this.pagination()
         },
         handleSubmitAddUserForm(){
-            this.isLoading = true
-            axios.post("https://jsonplaceholder.typicode.com/users", this.newUserInfo).then((res)=>{
-                if (res.status === 201) {
-                    this.mainUsers.push(res.data)
-                    this.showAddModal= false
-                    this.handleResetForm()
-                    this.pagination()
-                    M.toast({html: 'User created successfully...', classes: 'green'})
-                }
-            }).finally(()=>{
-                this.isLoading = false
-            })
+            if ('serviceWorker' in navigator && 'SyncManager' in window){
+                navigator.serviceWorker.ready.then(sw=>{
+                    const data = {
+                        ...this.newUserInfo,
+                        id: new Date().toISOString()
+                    }                    
+                    createData("postDataStore", data).then(()=>{
+                        sw.sync.register('syncPostData')
+                        console.log('successful sync...');
+                    })
+                })
+            }else{
+                this.isLoading = true
+                axios.post("https://jsonplaceholder.typicode.com/users", this.newUserInfo).then((res)=>{
+                    if (res.status === 201) {
+                        this.mainUsers.push(res.data)
+                        this.showAddModal= false
+                        this.handleResetForm()
+                        this.pagination()
+                        M.toast({html: 'User created successfully...', classes: 'green'})
+                    }
+                }).finally(()=>{
+                    this.isLoading = false
+                })
+            }
         },
         handleResetForm(){
             this.newUserInfo = {

@@ -97,3 +97,5 @@ document.getElementById('notification_bell_box')?.addEventListener('click', ()=>
   })
 })
 
+// createData("postDataStore", {id: 1, field: "test"})
+

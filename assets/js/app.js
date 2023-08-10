@@ -97,5 +97,22 @@ document.getElementById('notification_bell_box')?.addEventListener('click', ()=>
   })
 })
 
-// createData("postDataStore", {id: 1, field: "test"})
+// network status------------------------
 
+const setnetworkStatus = (status)=>{
+  const iconElem = document.querySelector("#network_status i");  
+  if (status == 1) {
+    iconElem.classList.add('green-text')
+    iconElem.classList.remove('red-text')
+  }else {
+    iconElem.classList.remove('green-text')
+    iconElem.classList.add('red-text')
+  }  
+}
+
+if (navigator.onLine) setnetworkStatus(1)
+else setnetworkStatus(0)
+
+
+window.addEventListener('online', ()=>setnetworkStatus(1))
+window.addEventListener('offline', ()=>setnetworkStatus(0))

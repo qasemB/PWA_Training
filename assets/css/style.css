@@ -101,6 +101,12 @@ table.highlight > tbody > tr:hover {
     animation-iteration-count: infinite;
 }
 
+#network_status{
+    position: fixed;
+    top: 14px;
+    right: 14px;
+}
+
 #media_player{
     max-width: 500px !important;
 }

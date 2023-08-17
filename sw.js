@@ -67,7 +67,7 @@ self.addEventListener("fetch", function(e){
         e.respondWith(
             caches.open(DYNAMIC_CACHE).then(cache=>{
                 return fetch(e.request).then(response=>{
-                    trimCache(DYNAMIC_CACHE, 10)
+                    trimCache(DYNAMIC_CACHE, 50)
                     cache.put(e.request, response.clone())
                     return response
                 });

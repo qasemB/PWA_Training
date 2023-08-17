@@ -81,6 +81,8 @@ document.addEventListener('alpine:init', () => {
                     createData("postDataStore", data).then(()=>{
                         sw.sync.register('syncPostData')
                         console.log('successful sync...');
+                        this.showAddModal= false
+                        M.toast({html: 'New user is in the sending queue', classes: 'orange'})
                     })
                 })
             }else{
